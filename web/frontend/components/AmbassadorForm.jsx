@@ -30,7 +30,6 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
     const navigate = useNavigate();
     const fetch = useAuthenticatedFetch();
     const appBridge = useAppBridge();
-    const [showResourcePicker, setShowResourcePicker] = useState(false);
 
     /*
       This is a placeholder function that is triggered when the user hits the "Save" button.
@@ -40,19 +39,28 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
     const onSubmit = useCallback(
         (body) => {
             (async () => {
+                //res.status(404).send();
+     
                 const parsedBody = body;
-                parsedBody.destination = parsedBody.destination[0];
+
+                //navigate('/ambassadors');
+               // parsedBody.destination = parsedBody.destination[0];
                 const AmbassadorId = Ambassador?.id;
+
+                
+
                 /* construct the appropriate URL to send the API request to based on whether the code is new or being updated */
                 const url = AmbassadorId ? `/api/ambassadors/${AmbassadorId}` : "/api/ambassadors";
                 /* a condition to select the appropriate HTTP method: PATCH to update a code or POST to create a new code */
                 const method = AmbassadorId ? "PATCH" : "POST";
                 /* use (authenticated) fetch from App Bridge to send the request to the API and, if successful, clear the form to reset the ContextualSaveBar and parse the response JSON */
+                
                 const response = await fetch(url, {
                     method,
                     body: JSON.stringify(parsedBody),
                     headers: { "Content-Type": "application/json" },
                 });
+                
                 if (response.ok) {
                     makeClean();
                     const Ambassador = await response.json();
@@ -64,10 +72,12 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                         setAmbassador(Ambassador);
                     }
                 }
+                else {
+                    //navigate('/ambassadors/');
+                }
             })();
             return { status: "success" };
-        },
-        [Ambassador, setAmbassador]
+        }, [Ambassador, setAmbassador]
     );
 
     /*
@@ -80,7 +90,7 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
       Returns helpers to manage form state, as well as component state that is based on form state.
     */
     const {
-        fields: { title, },
+        fields: { title }, //removed: email
         dirty,
         reset,
         submitting,
@@ -92,8 +102,10 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                 value: Ambassador?.title || "",
                 validates: [notEmptyString("Please name your Ambassador")],
             }),
-
-  
+           // email: useField({
+           //     value: "",
+           //     validates: [notEmptyString("Please enter an email")],
+            //}),
         },
         onSubmit,
     });
@@ -121,10 +133,16 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                             fullWidth
                         />
                         <FormLayout>
-                            <Card sectioned title="Title">
+                            <Card sectioned title="Name">
                                 <TextField
                                     {...title}
-                                    label="Title"
+                                    label="Name"
+                                />
+                            </Card>
+                            <Card sectioned title="Email">
+                                <TextField
+                                    //{...email}
+                                    label="Email"
                                 />
                             </Card>
                         </FormLayout>
