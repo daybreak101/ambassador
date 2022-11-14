@@ -45,9 +45,7 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
 
                 //navigate('/ambassadors');
                // parsedBody.destination = parsedBody.destination[0];
-                const AmbassadorId = Ambassador?.id;
-
-                
+                const AmbassadorId = Ambassador?.id
 
                 /* construct the appropriate URL to send the API request to based on whether the code is new or being updated */
                 const url = AmbassadorId ? `/api/ambassadors/${AmbassadorId}` : "/api/ambassadors";
