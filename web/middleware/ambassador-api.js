@@ -64,4 +64,13 @@ export default function applyAmbassadorApiEndpoints(app) {
             res.status(200).send(formattedAmbassador[0]);
         }
     });
+
+    app.delete("/api/ambassadors/:id", async (req, res) => {
+        const ambassador = await getAmbassadorOr404(req, res);
+
+        if (ambassador) {
+            await AmbassadorsDB.delete(req.params.id);
+            res.status(200).send();
+        }
+    });
 }

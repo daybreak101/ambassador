@@ -81,7 +81,15 @@ export const AmbassadorsDB = {
         return rows[0];
     },
 
-
+    delete: async function (id) {
+        await this.ready;
+        const query = `
+      DELETE FROM ${this.ambassadorsTableName}
+      WHERE id = ?;
+    `;
+        await this.__query(query, [id]);
+        return true;
+    },
 
     /* Private */
 
