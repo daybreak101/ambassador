@@ -143,6 +143,12 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                                     label="Email"
                                 />
                             </Card>
+                            <Card sectioned title="Email">
+                                <TextField
+                                    //{...email}
+                                    label="Email"
+                                />
+                            </Card>
                         </FormLayout>
                     </Form>
                 </Layout.Section>
