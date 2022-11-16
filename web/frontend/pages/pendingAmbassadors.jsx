@@ -63,16 +63,11 @@ export default function HomePage() {
         !isLoading && !Ambassadors?.length ? (
             <Card sectioned>
                 <EmptyState
-                    heading="Create unique Ambassador"
-                    /* This button will take the user to a Create a code page */
-                    action={{
-                        content: "Create Ambassador",
-                        onAction: () => navigate("/ambassadors/new"),
-                    }}
+                    heading="View Pending Ambassadors"
                     image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
                 >
                     <p>
-                        Allow customers to scan codes and buy products using their phones.
+                        There are currently no pending ambassador requests!
                     </p>
                 </EmptyState>
             </Card>

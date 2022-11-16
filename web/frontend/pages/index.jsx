@@ -72,7 +72,7 @@ export default function HomePage() {
                     image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
                 >
                     <p>
-                        Allow customers to scan codes and buy products using their phones.
+                        No active ambassadors at the moment!
                     </p>
                 </EmptyState>
             </Card>
