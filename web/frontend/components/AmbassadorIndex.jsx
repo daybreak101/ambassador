@@ -31,7 +31,10 @@ function SmallScreenCard({
                             <Stack.Item>
                                 <p>
                                     <TextStyle variation="strong">
+                                        { id }
                                         {truncate(title, 35)}
+                                        { createdAt }
+
                                     </TextStyle>
                                 </p>
                             </Stack.Item>
@@ -62,7 +65,7 @@ export function AmbassadorIndex({ Ambassadors, loading }) {
 
     //display for each row
     const rowMarkup = Ambassadors.map(
-        ({ id, title }, index) => {
+        ({ id, title, createdAt }, index) => {
            
             return (
 
@@ -74,12 +77,15 @@ export function AmbassadorIndex({ Ambassadors, loading }) {
                         navigate(`/ambassadors/${id}`);
                     }}
                 >
+                    <IndexTable.Cell>{id}</IndexTable.Cell>
                     <IndexTable.Cell>
                         <UnstyledLink data-primary-link url={`/ambassadors/${id}`}>
                             {truncate(title, 25)}
                         </UnstyledLink>
                     </IndexTable.Cell>
-                    <IndexTable.Cell>{id}</IndexTable.Cell>
+                    <IndexTable.Cell>{createdAt}</IndexTable.Cell>
+
+                    
                 </IndexTable.Row>
             );
         }
@@ -94,8 +100,10 @@ export function AmbassadorIndex({ Ambassadors, loading }) {
                 <IndexTable
                     resourceName={resourceName}
                     itemCount={Ambassadors.length}
-                    headings={[
-                        { title: "Title" },    
+                        headings={[
+                            { title: "ID#" },
+                            { title: "Name" },
+                            { title: "Joined" },
                     ]}
                     selectable={false}
                     loading={loading}

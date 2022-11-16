@@ -8,7 +8,7 @@ import {
     Page,
     SkeletonBodyText,
     Heading,
-    
+
 } from "@shopify/polaris";
 import { AmbassadorIndex } from "../components";
 import { useAppQuery } from "../hooks";
@@ -54,8 +54,8 @@ export default function HomePage() {
         </Card>
     ) : null;
 
-    const pendingAmbassadors = useCallback(async () => {
-        navigate("/pendingAmbassadors");
+    const activeAmbassadors = useCallback(async () => {
+        navigate("/");
     })
 
     /* Use Polaris Card and EmptyState components to define the contents of the empty state */
@@ -86,24 +86,20 @@ export default function HomePage() {
         <Page fullWidth={!!ambassadorsMarkup}>
             <TitleBar
                 title="Ambassadors"
-                primaryAction={{
-                    content: "Create Ambassador",
-                    onAction: () => navigate("/ambassadors/new"),
-                }}
             />
             <Layout>
                 <Layout.Section>
                     <Button
                         size="large"
                         color="green"
-                        onClick={pendingAmbassadors}
+                        onClick={activeAmbassadors}
                     >
-                        View Pending Ambassadors
+                        View Active Ambassadors
                     </Button>
                 </Layout.Section>
-                
+
                 <Layout.Section>
-                    <Heading>Active Ambassadors</Heading>
+                    <Heading>Pending Ambassadors</Heading>
                     <br></br>
                     {loadingMarkup}
                     {ambassadorsMarkup}
