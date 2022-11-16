@@ -35,6 +35,18 @@ export async function getShopUrlFromSession(req, res) {
 export async function parseAmbassadorBody(req, res) {
     return {
         title: req.body.title,
+        email: req.body.email,
+        instagram: req.body.instagram,
+        twitter: req.body.twitter,
+        tiktok: req.body.tiktok,
+        facebook: req.body.facebook,
+        youtube: req.body.youtube,
+        phone: req.body.phone,
+        birth: req.body.birth,
+        plushie: req.body.plushie,
+        discovery: req.body.discovery,
+        hobbies: req.body.hobbies,
+        bio: req.body.bio,
     };
 
 }export async function formatAmbassadorResponse(req, res, rawCodeData) {

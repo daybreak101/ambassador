@@ -15,20 +15,44 @@ export const AmbassadorsDB = {
     create: async function ({
         shopDomain,
         title,
+        email,
+        instagram,
+        twitter,
+        tiktok,
+        facebook,
+        youtube,
+        phone,
+        birth,
+        plushie,
+        discovery,
+        hobbies,
+        bio,
     }) {
 
         await this.ready;
 
         const query = `
       INSERT INTO ${this.ambassadorsTableName}
-      (shopDomain, title)
-      VALUES (?, ?)
+      (shopDomain, title, email, instagram, twitter, tiktok, facebook, youtube, phone, birth, plushie, discovery, hobbies, bio)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING id;
     `;
 
         const rawResults = await this.__query(query, [
             shopDomain,
             title,
+            email,
+            instagram,
+            twitter,
+            tiktok,
+            facebook,
+            youtube,
+            phone,
+            birth,
+            plushie,
+            discovery,
+            hobbies,
+            bio,
         ]);
 
         return rawResults[0].id;
@@ -38,6 +62,18 @@ export const AmbassadorsDB = {
         id,
         {
             title,
+            email,
+            instagram,
+            twitter,
+            tiktok,
+            facebook,
+            youtube,
+            phone,
+            birth,
+            plushie,
+            discovery,
+            hobbies,
+            bio,
         }
     ) {
         await this.ready;
@@ -45,13 +81,37 @@ export const AmbassadorsDB = {
         const query = `
       UPDATE ${this.ambassadorsTableName}
       SET
-        title = ?
+        title = ?,
+        email = ?,
+        instagram = ?,
+        twitter = ?,
+        tiktok = ?,
+        facebook = ?,
+        youtube = ?,
+        phone = ?,
+        birth = ?,
+        plushie = ?,
+        discovery = ?,
+        hobbies = ?,
+        bio = ?
       WHERE
         id = ?;
     `;
 
         await this.__query(query, [
             title,
+            email,
+            instagram,
+            twitter,
+            tiktok,
+            facebook,
+            youtube,
+            phone,
+            birth,
+            plushie,
+            discovery,
+            hobbies,
+            bio,
             id,
         ]);
         return true;
@@ -126,7 +186,20 @@ export const AmbassadorsDB = {
         CREATE TABLE ${this.ambassadorsTableName} (
           id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
           shopDomain VARCHAR(511) NOT NULL,
-          title VARCHAR(511) NOT NULL
+          title VARCHAR(511) NOT NULL,
+          email VARCHAR(511) NOT NULL,
+          instagram VARCHAR(511),
+          twitter VARCHAR(511),
+          tiktok VARCHAR(511),
+          facebook VARCHAR(511),
+          youtube VARCHAR(511),
+          phone VARCHAR(511) NOT NULL,
+          birth VARCHAR(511),
+          plushie VARCHAR(511) NOT NULL,
+          discovery VARCHAR(511),
+          hobbies VARCHAR(511),
+          bio VARCHAR(1023),
+          createdAt DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime'))
         )
       `;
 
