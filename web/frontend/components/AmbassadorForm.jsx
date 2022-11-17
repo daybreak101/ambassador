@@ -100,20 +100,101 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
         fields: {
             title: useField({
                 value: Ambassador?.title || "",
-                validates: [notEmptyString("Please name your Ambassador"), ],
+                validates: [
+                    notEmptyString("Please name your Ambassador"),
+                    (title) => {
+                        if (!new RegExp(/^[\p{L}'][ \p{L}'-]*[\p{L}]$/u).test(title)) {
+                            return 'Name cannot have special characters!'
+                        }
+                    }
+                ],
             }),
             email: useField({
                 value: Ambassador?.email || "",
-                validates: [notEmptyString("Please enter an email")],
+                validates: [
+                    notEmptyString("Please enter an email"),
+                    (email) => {
+                        if (!new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(email)) {
+                            return 'Email is not in correct format.'
+                        }
+                    }
+                ],
             }),
-            instagram: useField(Ambassador?.instagram || ""),
-            twitter: useField(Ambassador?.twitter || ""),
-            tiktok: useField(Ambassador?.tiktok || ""),
-            facebook: useField(Ambassador?.facebook || ""),
-            youtube: useField(Ambassador?.youtube || ""),
+            instagram: useField({
+                value: Ambassador?.instagram || "",
+                validates: [
+                    (instagram) => {
+                        if (instagram.length == 0) {
+                            return ''
+                        }
+                        else if (!new RegExp(/(?:(?:http | https): \/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/).test(instagram)) {
+                            return 'Please enter a valid Instagram profile URL or leave it empty.'
+                        }
+                    }
+                ],
+            }),
+            twitter: useField({
+                value: Ambassador?.twitter || "",
+                validates: [
+                    (twitter) => {
+                        if (twitter.length == 0) {
+                            return ''
+                        }
+                        else if (!new RegExp(/(?:https?:\/\/)?(?:[A-z]+\.)?twitter\.com\//).test(twitter)) {
+                            return 'Please enter a valid Twitter profile URL or leave it empty.'
+                        }
+                    }
+                ],
+            }),
+            tiktok: useField({
+                value: Ambassador?.tiktok || "",
+                validates: [
+                    (tiktok) => {
+                        if (tiktok.length == 0) {
+                            return ''
+                        }
+                        else if (!new RegExp(/(?:https?:\/\/)?(?:[A-z]+\.)?tiktok\.com\//).test(tiktok)) {
+                            return 'Please enter a valid TikTok profile URL or leave it empty.'
+                        }
+                    }
+                ],
+            }),
+            facebook: useField({
+                value: Ambassador?.facebook || "",
+                validates: [
+                    (facebook) => {
+                        if (facebook.length == 0) {
+                            return ''
+                        }
+                        else if (!new RegExp(/(?:https?:\/\/)?(?:www\.)?(mbasic.facebook|m\.facebook|facebook|fb)\.(com|me)\/(?:(?:\w\.)*#!\/)?(?:pages\/)?(?:[\w\-\.]*\/)*([\w\-\.]*)/).test(facebook)) {
+                            return 'Please enter a valid Facebook profile URL or leave it empty.'
+                        }
+                    }
+                ],
+            }),
+            youtube: useField({
+                value: Ambassador?.youtube || "",
+                validates: [
+                    (youtube) => {
+                        if (youtube.length == 0) {
+                            return ''
+                        }
+                        else if (!new RegExp(/(https?:\/\/)?(www\.)?youtu((\.be)|(be\..{2,5}))\//g).test(youtube)) {
+                            return 'Please enter a valid YouTube profile URL or leave it empty.'
+                        }
+                    }
+                ],
+            }),
             phone: useField({
                 value: Ambassador?.phone || "",
-                validates: [notEmptyString("Please enter ambassador's phone number")],
+                validates: [
+                    notEmptyString("Please name your Ambassador"),
+                    (phone) => {
+                        if (!new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im).test(phone)) {
+                            return 'Phone number can only contain numbers.'
+                        }
+                    }
+                ],
             }),
             birth: useField(Ambassador?.birth || ""),
             plushie: useField({
@@ -141,100 +222,6 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
         }
     }, [Ambassador]);
 
-
-    //Form values
-    const [values, setValues] = useState({});
-    //Errors
-    const [titleError, setTitleError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [instagramError, setInstagramError] = useState('');
-    const [twitterError, setTwitterError] = useState('');
-    const [tiktokError, setTiktokError] = useState('');
-    const [facebookError, setFacebookError] = useState('');
-    const [youtubeError, setYoutubeError] = useState('');
-
-    const validate = (event, name, value) => {
-        //A function to validate each input values
-
-        switch (name) {
-            case 'title':
-                if (!new RegExp(/^[\p{L}'][ \p{L}'-]*[\p{L}]$/u).test(value)) {
-                    setTitleError('Enter a valid name')
-                } else {
-                    setTitleError('');
-                }
-                break;
-
-            case 'email':
-                if (!new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(value)) {
-                    setEmailError('Enter a valid email address')
-                } else {
-                    setEmailError('');
-                }
-                break;
-            //TODO: find a way to not include other content. Only profiles (low priority)
-            case 'instagram':
-                if (!new RegExp(/(?:(?:http | https): \/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/).test(value)) {
-                    setInstagramError('Enter a valid Instagram profile URL')
-                } else {
-                    setInstagramError('');
-                }
-                break;
-
-            //TODO: find a way to not include other content. Only profiles (low priority)
-            case 'twitter':
-                if (!new RegExp(/(?:https?:\/\/)?(?:[A-z]+\.)?twitter\.com\//).test(value)) {
-                    setTwitterError('Enter a valid Twitter profile URL')
-                } else {
-                    setTwitterError('');
-                }
-                break;
-            //TODO: fix regex, https//
-            case 'tiktok':
-                if (!new RegExp(/(?:https?:\/\/)?(?:[A-z]+\.)?tiktok\.com\//).test(value)) {
-                    setTiktokError('Enter a valid TikTok user URL')
-                } else {
-                    setTiktokError('');
-                }
-                break;
-            //TODO: find a way to not include other content. Only profiles (low priority)
-            case 'facebook':
-                if (!new RegExp(/(?:https?:\/\/)?(?:www\.)?(mbasic.facebook|m\.facebook|facebook|fb)\.(com|me)\/(?:(?:\w\.)*#!\/)?(?:pages\/)?(?:[\w\-\.]*\/)*([\w\-\.]*)/).test(value)) {
-                    setFacebookError('Enter a valid Facebook profile URL')
-                } else {
-                    setFacebookError('');
-                }
-                break;
-            //TODO: find a way to not include videos or other content. Only channels (low priority)
-            case 'youtube':
-                if (!new RegExp(/(https?:\/\/)?(www\.)?youtu((\.be)|(be\..{2,5}))\//g).test(value)) {
-                    setYoutubeError('Enter a valid youtube channel URL')
-                } else {
-                    setYoutubeError('');
-                }
-                break;
-            default: break;
-        }
-    }
-
-    //A method to handle form inputs
-    const handleChange = (event) => {
-        //To stop default events    
-        event.persist();
-
-        let name = event.target.name;
-        let val = event.target.value;
-
-        validate(event, name, val);
-
-        //Let's set these values in state
-        setValues({
-            ...values,
-            [name]: val,
-        })
-
-    }
-
     return (
         <Stack vertical>
             <Layout>
@@ -261,11 +248,8 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                                 <TextField
                                     {...title}
                                     type="title"
-                                    name="title"
                                     label="Name"
-                                    onBlur={handleChange}
                                 />
-                                { titleError && <h3>{titleError}</h3> }
                                 <br></br>
                                 <TextField
                                     {...birth}
@@ -279,47 +263,32 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                                 <TextField
                                     {...instagram}
                                     type="instagram"
-                                    name="instagram"
                                     label="Instagram"
-                                    onBlur={handleChange}
                                 />
-                                {instagramError && <h3>{instagramError}</h3>}
                                 <br></br>
                                 <TextField
                                     {...twitter}
                                     type="twitter"
-                                    name="twitter"
                                     label="Twitter"
-                                    onBlur={handleChange}
                                 />
-                                {twitterError && <h3>{twitterError}</h3>}
                                 <br></br>
                                 <TextField
                                     {...tiktok}
                                     type="tiktok"
-                                    name="tiktok"
                                     label="TikTok"
-                                    onBlur={handleChange}
                                 />
-                                {tiktokError && <h3>{tiktokError}</h3>}
                                 <br></br>
                                 <TextField
                                     {...facebook}
                                     type="facebook"
-                                    name="facebook"
                                     label="Facebook"
-                                    onBlur={handleChange}
                                 />
-                                {facebookError && <h3>{facebookError}</h3>}
                                 <br></br>
                                 <TextField
                                     {...youtube}
                                     type="youtube"
-                                    name="youtube"
                                     label="YouTube"
-                                    onBlur={handleChange}
                                 />
-                                {youtubeError && <h3>{youtubeError}</h3>}
                                 <br></br>
                             </Card>
                             <Card sectioned title="Contact Info">
@@ -332,10 +301,7 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                                     {...email}
                                     label="Email"
                                     type="email"
-                                    name="email"
-                                    onBlur={handleChange}
                                 />
-                                {emailError && <h3>{emailError}</h3>}
                                 <br></br>
                             </Card>   
                             <Card sectioned title="Shore Buddies">
@@ -379,6 +345,14 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                         </Button>
                     )}
                 </Layout.Section>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
             </Layout>
         </Stack>
     );
