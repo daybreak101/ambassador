@@ -37,7 +37,7 @@ export default function HomePage() {
         */
         isRefetching,
     } = useAppQuery({
-        url: "/api/ambassadors",
+        url: "/api/inactive",
     });
 
     //const Ambassadors = [];

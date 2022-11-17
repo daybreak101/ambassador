@@ -74,6 +74,7 @@ export const AmbassadorsDB = {
             discovery,
             hobbies,
             bio,
+            isActive,
         }
     ) {
         await this.ready;
@@ -93,7 +94,8 @@ export const AmbassadorsDB = {
         plushie = ?,
         discovery = ?,
         hobbies = ?,
-        bio = ?
+        bio = ?,
+        isActive = ?
       WHERE
         id = ?;
     `;
@@ -113,6 +115,30 @@ export const AmbassadorsDB = {
             hobbies,
             bio,
             id,
+            isActive,
+        ]);
+        return true;
+    },
+
+    approve: async function (
+        id,
+        {
+            isActive,
+        }
+    ) {
+        await this.ready;
+
+        const query = `
+      UPDATE ${this.ambassadorsTableName}
+      SET
+        isActive = TRUE
+      WHERE
+        id = ?;
+    `;
+
+        await this.__query(query, [
+            id,
+            isActive,
         ]);
         return true;
     },
@@ -121,7 +147,21 @@ export const AmbassadorsDB = {
         await this.ready;
         const query = `
       SELECT * FROM ${this.ambassadorsTableName}
-      WHERE shopDomain = ?;
+      WHERE shopDomain = ?
+      AND isActive = TRUE;
+    `;
+
+        const results = await this.__query(query, [shopDomain]);
+
+        return results.map((ambassador) => ambassador);
+    },
+
+    listInactive: async function (shopDomain) {
+        await this.ready;
+        const query = `
+      SELECT * FROM ${this.ambassadorsTableName}
+      WHERE shopDomain = ?
+      AND isActive = FALSE;
     `;
 
         const results = await this.__query(query, [shopDomain]);
@@ -199,7 +239,8 @@ export const AmbassadorsDB = {
           discovery VARCHAR(511),
           hobbies VARCHAR(511),
           bio VARCHAR(1023),
-          createdAt DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime'))
+          createdAt DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')),
+          isActive INTEGER NOT NULL DEFAULT (FALSE)
         )
       `;
 

@@ -42,9 +42,39 @@ export default function applyAmbassadorApiEndpoints(app) {
         }
     });
 
+    app.patch("/api/ambassadors/:id/approve", async (req, res) => {
+        const ambassador = await getAmbassadorOr404(req, res);
+
+        if (ambassador) {
+            try {
+                await AmbassadorsDB.approve(req.params.id, await parseAmbassadorBody(req));
+                const response = await formatAmbassadorResponse(req, res, [
+                    await AmbassadorsDB.read(req.params.id),
+                ]);
+                res.status(200).send(response[0]);
+            } catch (error) {
+                res.status(500).send(error.message);
+            }
+        }
+    });
+
    app.get("/api/ambassadors", async (req, res) => {
         try {
             const rawCodeData = await AmbassadorsDB.list(
+                await getShopUrlFromSession(req, res)
+            );
+
+            const response = await formatAmbassadorResponse(req, res, rawCodeData);
+            res.status(200).send(response);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+   });
+
+    app.get("/api/inactive", async (req, res) => {
+        try {
+            const rawCodeData = await AmbassadorsDB.listInactive(
                 await getShopUrlFromSession(req, res)
             );
 

@@ -89,7 +89,7 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
       Returns helpers to manage form state, as well as component state that is based on form state.
     */
     const {
-        fields: { title, email, instagram, twitter, tiktok, facebook, youtube, phone, birth, plushie, discovery, hobbies, bio },
+        fields: { title, email, instagram, twitter, tiktok, facebook, youtube, phone, birth, plushie, discovery, hobbies, bio, isActive },
         dirty,
         reset,
         value,
@@ -204,6 +204,7 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
             discovery: useField(Ambassador?.discovery || ""),
             hobbies: useField(Ambassador?.hobbies || ""),
             bio: useField(Ambassador?.bio || ""),
+            isActive: useField(Ambassador?.isActive)
         },
         onSubmit,
     });
@@ -219,6 +220,20 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
 
         if (response.ok) {
             navigate(`/`);
+        }
+    }, [Ambassador]);
+
+    const [isApproving, setIsApproving] = useState(false);
+    const approveAmbassador = useCallback(async () => {
+        reset();
+        setIsApproving(true);
+        const response = await fetch(`/api/ambassadors/${Ambassador.id}/approve`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.ok) {
+            navigate(`/pendingAmbassadors`);
         }
     }, [Ambassador]);
 
@@ -334,7 +349,7 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                     </Form>
                 </Layout.Section>
                 <Layout.Section>
-                    {Ambassador?.id && (
+                    {Ambassador?.isActive == true && (
                         <Button
                             outline
                             destructive
@@ -342,6 +357,26 @@ export function AmbassadorForm({ Ambassador: InitialAmbassador }) {
                             loading={isDeleting}
                         >
                             Delete Ambassador
+                        </Button>
+                    )}
+                    {Ambassador?.isActive == false && (
+                        <Button
+                            outline
+                            destructive
+                            onClick={deleteAmbassador}
+                            loading={isDeleting}
+                        >
+                            Decline Ambassador
+                        </Button>
+                    )}
+                    {Ambassador?.isActive == false && (
+                        <Button
+                            outline
+                            destructive
+                            onClick={approveAmbassador}
+                            loading={isApproving}
+                        >
+                            Approve Ambassador
                         </Button>
                     )}
                 </Layout.Section>
